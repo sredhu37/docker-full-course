@@ -1,16 +1,6 @@
-FROM node:24.13.0@sha256:1de022d8459f896fff2e7b865823699dc7a8d5567507e8b87b14a7442e07f206
+FROM node:24.13.0@sha256:1de022d8459f896fff2e7b865823699dc7a8d5567507e8b87b14a7442e07f206 AS builder
 
 WORKDIR /app
-
-# Option 1: COPY and Extract using tar
-# COPY nginx-1.9.9.tar.gz ./
-# RUN tar -xzf nginx-1.9.9.tar.gz
-
-# Option 2: ADD
-ADD nginx-1.9.9.tar.gz ./
-
-# Download a file from the internet
-ADD https://raw.githubusercontent.com/github/gitignore/refs/heads/main/Node.gitignore /app/.gitignore
 
 COPY package.json package-lock.json ./
 
@@ -20,7 +10,12 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+FROM node:24.13.0@sha256:1de022d8459f896fff2e7b865823699dc7a8d5567507e8b87b14a7442e07f206 AS final
 
-ENTRYPOINT ["npm", "start"]
-CMD ["--", "--port", "3000"]
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+
+EXPOSE 3000
+CMD ["npm", "start"]
