@@ -12,11 +12,13 @@ COPY . .
 
 RUN npm run build
 
-FROM gcr.io/distroless/nodejs24-debian13:debug AS final
+FROM node:24.13.0-slim as final
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/static ./.next/static
 
+USER node
+
 EXPOSE 3000
-CMD ["server.js"]
+CMD ["node", "server.js"]
