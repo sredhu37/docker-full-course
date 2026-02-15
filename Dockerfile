@@ -12,7 +12,7 @@ COPY . .
 
 RUN npm run build
 
-FROM gcr.io/distroless/nodejs24-debian13:nonroot AS final
+FROM gcr.io/distroless/nodejs24-debian13:debug AS final
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public

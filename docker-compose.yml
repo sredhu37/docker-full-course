@@ -3,3 +3,18 @@ services:
     build: .
     ports:
       - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:secret@db:5432/myapp
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
