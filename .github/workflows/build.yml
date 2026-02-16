@@ -7,7 +7,6 @@ on:
     branches: [ '**' ]
 
 env:
-  REGISTRY: docker.io
   IMAGE_NAME: sunnyredhu/docker-demo
 
 jobs:
@@ -43,22 +42,12 @@ jobs:
           username: sunnyredhu
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.GITHUB_SHA }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
