@@ -2,9 +2,14 @@ FROM node:24.13.0@sha256:1de022d8459f896fff2e7b865823699dc7a8d5567507e8b87b14a74
 
 WORKDIR /app
 
-COPY package.json package-lock.json node_modules ./
+COPY package.json package-lock.json ./
+COPY node_modules ./node_modules
 
 COPY . .
+
+ENV NODE_ENV=production
+
+RUN npm ci --production
 
 RUN npm run build
 

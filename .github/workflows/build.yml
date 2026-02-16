@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-next-
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --production
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.12.0

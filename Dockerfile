@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN npm ci
+ENV NODE_ENV=production
+
+RUN npm ci --production
 
 COPY . .
 
