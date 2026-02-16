@@ -27,6 +27,14 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
 
+      - uses: actions/cache@v5.0.3
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextcache-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.ts', '**/*.tsx', '**/*.css') }}
+          restore-keys: |
+            ${{ runner.os }}-nextcache-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-nextcache-
+
       - name: Build Next.js
         run: npm run build
 
