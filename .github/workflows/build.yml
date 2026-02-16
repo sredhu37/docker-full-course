@@ -38,4 +38,4 @@ jobs:
           context: .
           file: Dockerfile.ci
           push: false
-          tags: docker-demo:${GITHUB_SHA}
+          tags: docker-demo:with-cache
